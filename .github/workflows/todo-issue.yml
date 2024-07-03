@@ -1,21 +1,20 @@
-name: "Run TODO to Issue"
-on:
-  push:
-  workflow_dispatch:
-    inputs:
-      MANUAL_COMMIT_REF:
-        description: "The SHA of the commit to get the diff for"
-        required: true
-      MANUAL_BASE_REF:
-        description: "By default, the commit entered above is compared to the one directly before it; to go back further, enter an earlier SHA here"
-        required: false
+name: GitHub Actions Demo
+run-name: ${{ github.actor }} is testing out GitHub Actions 🚀
+on: [push]
 jobs:
-  build:
-    runs-on: "ubuntu-latest"
+  Explore-GitHub-Actions:
+    runs-on: ubuntu-latest
     steps:
-      - uses: "actions/checkout@v3"
-      - name: "TODO to Issue"
-        uses: "alstr/todo-to-issue-action@master"
-        env:
-          MANUAL_COMMIT_REF: ${{ inputs.MANUAL_COMMIT_REF }}
-          MANUAL_BASE_REF: ${{ inputs.MANUAL_BASE_REF }}
+      #- run: echo "🎉 The job was automatically triggered by a ${{ github.event_name }} event."
+      #- run: echo "🐧 This job is now running on a ${{ runner.os }} server hosted by GitHub!"
+      #- run: echo "🔎 The name of your branch is ${{ github.ref }} and your repository is ${{ github.repository }}."
+      #- name: Check out repository code
+      #  uses: actions/checkout@v4
+      #- run: echo "💡 The ${{ github.repository }} repository has been cloned to the runner."
+      #- run: echo "🖥️ The workflow is now ready to test your code on the runner."
+      #- name: List files in the repository
+      #  run: |
+      #    ls ${{ github.workspace }}
+      #- run: echo "🍏 This job's status is ${{ job.status }}."
+      - name: TODO to Issue
+        uses: alstr/todo-to-issue-action@v4.13.1
