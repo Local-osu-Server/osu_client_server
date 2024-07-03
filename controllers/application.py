@@ -5,6 +5,8 @@ import usecases
 
 application_router = APIRouter(prefix="/application")
 
+# TODO: create /kill endpoint
+# kils osu! process
 
 @application_router.get("/path")
 async def get_path():
@@ -14,5 +16,3 @@ async def get_path():
     except Exception as e:
         return JSONResponse(status_code=500, content={"message": str(e)})
 
-# TODO: /kill
-# kills the osu! process
