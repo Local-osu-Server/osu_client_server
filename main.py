@@ -1,16 +1,19 @@
-import uvicorn
 from contextlib import asynccontextmanager
+
+import uvicorn
 from fastapi import FastAPI
+from fastapi.middleware.cors import CORSMiddleware
 
 from controllers.application import application_router
-from fastapi.middleware.cors import CORSMiddleware
+
 
 @asynccontextmanager
 async def lifespan(app: FastAPI):
-    
+
     app.include_router(application_router)
-    
+
     yield
+
 
 app = FastAPI(lifespan=lifespan)
 

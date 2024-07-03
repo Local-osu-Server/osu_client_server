@@ -1,8 +1,10 @@
-from fastapi.routing import APIRouter
-import usecases
 from fastapi.responses import JSONResponse
+from fastapi.routing import APIRouter
+
+import usecases
 
 application_router = APIRouter(prefix="/application")
+
 
 @application_router.get("/path")
 async def get_path():
