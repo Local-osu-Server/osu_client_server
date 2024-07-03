@@ -13,3 +13,6 @@ async def get_path():
         return JSONResponse(status_code=200, content=response)
     except Exception as e:
         return JSONResponse(status_code=500, content={"message": str(e)})
+
+# TODO: /kill
+# kills the osu! process
