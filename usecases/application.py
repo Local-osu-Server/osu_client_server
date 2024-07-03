@@ -1,15 +1,9 @@
-from pathlib import Path
-
-import psutil
+from repositories.application import ApplicationRepo
 
 
-def get_osu_folder_path():
+def get_osu_folder_path() -> dict[str, str]:
     """Get osu! folder path"""
-    for process in psutil.process_iter():
-        if process.name() == "osu!.exe":
-            osu_path = Path(process.cwd())
 
-            return {"message": "osu!.exe found.", "path": str(osu_path)}
+    application_repo = ApplicationRepo()
 
-    # if the process is not found, return None
-    return {"message": "No osu!.exe process found."}
+    return application_repo.get_osu_folder_path()
