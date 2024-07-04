@@ -3,6 +3,10 @@ from pathlib import Path
 import psutil
 
 
+class GetOsuFolderPathError(Exception):
+    ...
+
+
 class ApplicationRepo:
     def __init__(self) -> None:
         pass
@@ -17,4 +21,4 @@ class ApplicationRepo:
                 return {"message": "osu!.exe found.", "path": str(osu_path)}
 
         # if the process is not found, return None
-        return {"message": "No osu!.exe process found."}
+        raise GetOsuFolderPathError("osu!.exe not found.")
