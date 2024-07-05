@@ -6,9 +6,6 @@ from repositories.application import GetOsuFolderPathError
 
 application_router = APIRouter(prefix="/application")
 
-# TODO: create /kill endpoint
-# kils osu! process
-
 
 @application_router.post("/kill")
 async def kill_osu():
