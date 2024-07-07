@@ -25,6 +25,7 @@ def setup_logging() -> logging.Logger:
 
     return logger
 
+# TODO: Probably have an enum of "log levels" and use that instead of the color parameter
 
 def log(message: str, color: str | None = None) -> None:
     if color == Colors.RED:
