@@ -1,1 +1,1 @@
-from . import application
+from . import application, bancho

@@ -5,12 +5,22 @@ from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 
 from controllers.application import application_router
+from controllers.bancho import bancho_router
 
 
 @asynccontextmanager
 async def lifespan(app: FastAPI):
 
     app.include_router(application_router)
+
+    for prefix in ("c", "ce", "c4", "c5", "c6"):
+        app.include_router(bancho_router, prefix=f"/{prefix}")
+
+    # TODO: Handle /assets/*
+    # TODO: Handle /web/*
+    # TODO: Handle /a/*
+    # TODO: Handle /b/*
+    # TODO: Handle /osu/*
 
     yield
 

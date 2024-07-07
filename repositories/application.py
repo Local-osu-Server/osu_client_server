@@ -58,6 +58,7 @@ class ApplicationRepo:
         raise KillOsuError("osu!.exe not found.")
 
     async def launch_osu(self) -> dict[str, str]:
+        # TODO: make adaparter for this
         response = await self.http_client.get("http://localhost:5000/api/v1/config/")
 
         if response.status_code >= 400:
