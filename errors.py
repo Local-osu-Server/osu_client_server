@@ -14,6 +14,8 @@ class AdapterAPIError(ServerErrorType):
     LOGIN_FAILED = "LOGIN_FAILED"
     GET_PROFILE_FAILED = "GET_PROFILE_FAILED"
     GET_RANK_FAILED = "GET_RANK_FAILED"
+    GET_SESSION_FAILED = "GET_SESSION_FAILED"
+    LOGOUT_FAILED = "LOGOUT_FAILED"
 
 
 class ApplicationRepoError(ServerErrorType):

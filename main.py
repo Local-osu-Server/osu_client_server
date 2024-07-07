@@ -1,12 +1,14 @@
+import asyncio
 from contextlib import asynccontextmanager
 
 import uvicorn
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 
-from common.log import setup_logging
+from common.log import LogTypes, log, setup_logging
 from controllers.application import application_router
 from controllers.bancho import bancho_router
+from crons.client import check_if_client_is_closed
 
 
 @asynccontextmanager
@@ -23,6 +25,10 @@ async def lifespan(app: FastAPI):
     # TODO: Handle /a/*
     # TODO: Handle /b/*
     # TODO: Handle /osu/*
+
+    asyncio.create_task(check_if_client_is_closed())
+
+    log("osu! Client Service Launched!", LogTypes.SUCCESS)
 
     yield
 

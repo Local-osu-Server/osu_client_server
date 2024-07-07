@@ -1,6 +1,7 @@
+import asyncio
 from typing import Literal
 
-from fastapi import Body, Header, Request, Response
+from fastapi import BackgroundTasks, Header, Request, Response
 from fastapi.routing import APIRouter
 
 import usecases
@@ -64,7 +65,6 @@ async def bancho_handler(
     osu_token: str | None = Header(None),
     user_agent: Literal["osu!"] = Header(...),
 ):
-
     if osu_token is None:  # not logged in, login
         response = await usecases.bancho.login(raw_login_data=await request.body())
 
@@ -77,6 +77,3 @@ async def bancho_handler(
         )
 
     # TODO: handle packets
-    print("LLOGGED IN")
-
-    print("Osu token:", osu_token)

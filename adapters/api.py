@@ -41,7 +41,6 @@ async def login(username: str) -> LoginResponse | ServerError:
             in_scope_variables=dir(),
         )
 
-    # TODO: typedict the response
     return response.json()
 
 
@@ -98,3 +97,50 @@ async def get_rank(pp: int) -> RankFromPPResponse | ServerError:
         )
 
     return response.json()
+
+
+async def logout(user_id: int) -> None | ServerError:
+    response = await http_client.post(
+        url=f"{BASE_API_URL}/bancho/logout",
+        json={"user_id": user_id},
+    )
+
+    if response.status_code >= 400:
+        return ServerError(
+            error_name=AdapterAPIError.LOGOUT_FAILED,
+            message=f"Failed to logout: {response.text}",
+            file_location=__file__,
+            line=ServerError.get_current_line(),
+            local_variables=locals(),
+            in_scope_variables=dir(),
+        )
+
+    return None
+
+
+"""
+class Session(TypedDict):
+    current_osu_token: str
+    current_user_id: int
+    current_packet_queue: list[dict]  # TODO: typedict the packets
+
+async def get_current_session(user_id: int) -> Session | ServerError:
+    response = await http_client.get(
+        url=f"{BASE_API_URL}/bancho/session",
+        params={
+            "user_id": user_id,
+        }
+    )
+
+    if response.status_code >= 400:
+        return ServerError(
+            error_name=AdapterAPIError.GET_SESSION_FAILED,
+            message=f"Failed to get session: {response.text}",
+            file_location=__file__,
+            line=ServerError.get_current_line(),
+            local_variables=locals(),
+            in_scope_variables=dir(),
+        )
+
+    return response.json()
+"""

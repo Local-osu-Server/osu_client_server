@@ -1,10 +1,9 @@
 import logging
+from enum import Enum
 
 from colorama import Fore as Colors
 from colorama import Style
 from colorama import init as colorama_init
-
-from enum import Enum
 
 colorama_init()
 
@@ -27,11 +26,13 @@ def setup_logging() -> logging.Logger:
 
     return logger
 
+
 class LogTypes(Enum):
     INFO = "INFO"
     ERROR = "ERROR"
     WARNING = "WARNING"
     SUCCESS = "SUCCESS"
+
 
 def log(message: str, type: LogTypes) -> None:
     if type == LogTypes.ERROR:

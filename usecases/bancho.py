@@ -1,6 +1,7 @@
 from typing import TypedDict
 
 import adapters.api as api
+import crons.client
 import packets.reading as packet_reading
 import packets.writing as packet_writing
 from errors import ServerError
@@ -10,6 +11,11 @@ from packets.writing import ServerPacket
 class LoginResponse(TypedDict):
     osu_token: str
     packets: list[ServerPacket]
+
+
+async def logout(user_id: int) -> None | ServerError:
+    response = await api.logout(user_id=user_id)
+    return response
 
 
 async def login(raw_login_data: bytes) -> LoginResponse:
@@ -26,6 +32,10 @@ async def login(raw_login_data: bytes) -> LoginResponse:
                 error_message=login_response.detailed_error_message
             ),
         )
+
+    # only set the user id if we are logged in
+    # TODO: maybe interrupt the whole idea of a session?
+    crons.client.USER_ID = login_response["profile"]["user_id"]
 
     # we are now logged in server side
     # but we need some more data from the api

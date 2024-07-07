@@ -27,6 +27,15 @@ class ApplicationRepo:
     def __init__(self) -> None:
         self.http_client = AsyncClient()
 
+    def is_client_running(self) -> bool:
+        """Check if osu! client is running"""
+
+        for process in psutil.process_iter():
+            if process.name() == "osu!.exe":
+                return True
+
+        return False
+
     def get_osu_folder_path(self) -> dict[str, str] | ServerError:
         """Get osu! folder path"""
 
