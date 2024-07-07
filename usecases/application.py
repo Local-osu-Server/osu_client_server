@@ -1,7 +1,8 @@
+from errors import ServerError
 from repositories.application import ApplicationRepo
 
 
-def get_osu_folder_path() -> dict[str, str]:
+def get_osu_folder_path() -> dict[str, str] | ServerError:
     """Get osu! folder path"""
 
     application_repo = ApplicationRepo()
@@ -9,7 +10,7 @@ def get_osu_folder_path() -> dict[str, str]:
     return application_repo.get_osu_folder_path()
 
 
-def kill_osu() -> dict[str, str]:
+def kill_osu() -> dict[str, str] | ServerError:
     """Kill osu! process"""
 
     application_repo = ApplicationRepo()
@@ -17,7 +18,7 @@ def kill_osu() -> dict[str, str]:
     return application_repo.kill_osu()
 
 
-async def launch_osu() -> dict[str, str]:
+async def launch_osu() -> dict[str, str] | ServerError:
     """Launch osu!"""
 
     application_repo = ApplicationRepo()

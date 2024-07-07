@@ -3,6 +3,7 @@ from typing import TypedDict
 import adapters.api as api
 import packets.reading as packet_reading
 import packets.writing as packet_writing
+from errors import ServerError
 from packets.writing import ServerPacket
 
 
@@ -14,23 +15,44 @@ class LoginResponse(TypedDict):
 async def login(raw_login_data: bytes) -> LoginResponse:
     login_info = packet_reading.login_data(raw_login_data)
 
-    try:
-        # TODO: utilize logging more 
-        login_response = await api.login(username=login_info["username"])
+    # TODO: utilize logging more
+    login_response = await api.login(username=login_info["username"])
 
-        # we are now logged in server side
-        # but we need some more data from the api
-        # so we can send the proper login response
-
-        user_stats_response = await api.get_profile(
-            user_id=login_response["profile"]["user_id"]
+    if isinstance(login_response, ServerError):
+        login_response.print_error()
+        return LoginResponse(
+            osu_token="ERROR",
+            packets=packet_writing.login_error_response(
+                error_message=login_response.detailed_error_message
+            ),
         )
 
-        rank_response = await api.get_rank(pp=user_stats_response["pp"])
-    except Exception as e:
+    # we are now logged in server side
+    # but we need some more data from the api
+    # so we can send the proper login response
+
+    user_stats_response = await api.get_profile(
+        user_id=login_response["profile"]["user_id"]
+    )
+
+    if isinstance(user_stats_response, ServerError):
+        user_stats_response.print_error()
         return LoginResponse(
-            osu_token="SOMETHING",
-            packets=packet_writing.login_error_response(str(e)),
+            osu_token="ERROR",
+            packets=packet_writing.login_error_response(
+                error_message=user_stats_response.detailed_error_message
+            ),
+        )
+
+    rank_response = await api.get_rank(pp=user_stats_response["pp"])
+
+    if isinstance(rank_response, ServerError):
+        rank_response.print_error()
+        return LoginResponse(
+            osu_token="ERROR",
+            packets=packet_writing.login_error_response(
+                error_message=rank_response.detailed_error_message
+            ),
         )
 
     # write the login response packet with all the collected data

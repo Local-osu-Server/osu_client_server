@@ -5,13 +5,7 @@ from typing import TypedDict
 import psutil
 from httpx import AsyncClient
 
-
-class GetOsuFolderPathError(Exception):
-    ...
-
-
-class KillOsuError(Exception):
-    ...
+from errors import ApplicationRepoError, ServerError
 
 
 class ConfigJSON(TypedDict):
@@ -33,7 +27,7 @@ class ApplicationRepo:
     def __init__(self) -> None:
         self.http_client = AsyncClient()
 
-    def get_osu_folder_path(self) -> dict[str, str]:
+    def get_osu_folder_path(self) -> dict[str, str] | ServerError:
         """Get osu! folder path"""
 
         for process in psutil.process_iter():
@@ -43,9 +37,17 @@ class ApplicationRepo:
                 return {"message": "osu!.exe found.", "path": str(osu_path)}
 
         # if the process is not found, return None
-        raise GetOsuFolderPathError("osu!.exe not found.")
+        return ServerError(
+            error_name=ApplicationRepoError.OSU_NOT_FOUND,
+            message="osu!.exe not found.",
+            file_location=__file__,
+            line=ServerError.get_current_line(),
+            status_code=404,
+            local_variables=locals(),
+            in_scope_variables=dir(),
+        )
 
-    def kill_osu(self) -> dict[str, str]:
+    def kill_osu(self) -> dict[str, str] | ServerError:
         """Kill osu! process"""
 
         for process in psutil.process_iter():
@@ -54,15 +56,30 @@ class ApplicationRepo:
 
                 return {"message": "osu!.exe killed."}
 
-        # if the process is not found, return None
-        raise KillOsuError("osu!.exe not found.")
+        return ServerError(
+            error_name=ApplicationRepoError.OSU_NOT_FOUND,
+            message="osu!.exe not found.",
+            file_location=__file__,
+            line=ServerError.get_current_line(),
+            status_code=404,
+            local_variables=locals(),
+            in_scope_variables=dir(),
+        )
 
-    async def launch_osu(self) -> dict[str, str]:
+    async def launch_osu(self) -> dict[str, str] | ServerError:
         # TODO: make adaparter for this
         response = await self.http_client.get("http://localhost:5000/api/v1/config/")
 
         if response.status_code >= 400:
-            raise GetOsuFolderPathError("Error while getting osu! folder path.")
+            return ServerError(
+                error_name=ApplicationRepoError.CONFIG_API_FAILED,
+                message="Error while getting osu! folder path.",
+                file_location=__file__,
+                line=ServerError.get_current_line(),
+                status_code=500,
+                local_variables=locals(),
+                in_scope_variables=dir(),
+            )
 
         config: ConfigJSON = response.json()
 

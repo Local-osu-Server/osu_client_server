@@ -456,7 +456,7 @@ def login_response(
     friends_list_packet = FriendsListPacket(friends=[])
 
     main_menu_icon_packet = MainMenuIconPacket(
-        image="https://avatars.githubusercontent.com/u/174163885?s=200&v=4",
+        image="https://cdn.discordapp.com/attachments/1253210219127767084/1259387437831028787/174163885.png?ex=668b7f73&is=668a2df3&hm=223a310e98a6c4aba87646a22aa18a7ff5b84ef6e3725952be368bac7c3028b5&.png",
         click_link="https://github.com/Local-osu-Server",
     )
 

@@ -4,12 +4,14 @@ import uvicorn
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 
+from common.log import setup_logging
 from controllers.application import application_router
 from controllers.bancho import bancho_router
 
 
 @asynccontextmanager
 async def lifespan(app: FastAPI):
+    app.state.logger = setup_logging()
 
     app.include_router(application_router)
 
